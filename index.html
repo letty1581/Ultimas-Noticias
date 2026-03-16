@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Portal de Noticias</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+ <header>
+  <h1>ULTIMAS NOTICIAS</h1>
+  <nav>
+
+   <a href="javascript:void(0)" onclick="cargarSeccion('inicio.html')">Inicio</a>
+   <a href="javascript:void(0)" onclick="cargarSeccion('nacionales.html')">Nacionales</a>
+   <a href="javascript:void(0)" onclick="cargarSeccion('deportes.html')">Deportes</a>
+   <a href="javascript:void(0)" onclick="cargarSeccion('espectaculos.html')">Espectáculos</a>
+   <a href="javascript:void(0)" onclick="cargarSeccion('cultura.html')">Cultura</a>
+   <a href="javascript:void(0)" onclick="cargarSeccion('contacto.html')">Contacto</a>
+
+  </nav>
+ </header>
+ 
+ <main>
+  <div id="contenido"></div>
+ </main>
+
+ <footer>
+  <p>&copy; 2026 Portal de Noticias. Todos los derechos reservados.</p>
+  <p>Redacción central | contacto@portaldnoticias.com</p>
+ </footer>
+
+ <script>
+  function cargarSeccion(archivo) {
+   fetch(archivo)
+    .then(function(response) {
+     return response.text();
+    })
+    .then(function(data) {
+     document.getElementById("contenido").innerHTML = data;
+
+     if (archivo === "inicio.html") {
+      iniciarSlider();
+
+     }
+
+    })
+
+    .catch(function() {
+
+     document.getElementById("contenido").innerHTML = "<div class='seccion'><h2 class='titulo-seccion'>Error</h2><p>No se pudo cargar la sección solicitada.</p></div>";
+
+    });
+
+  }
+
+
+
+  var indiceSlide = 0;
+
+  var slides = [];
+
+  var intervaloSlider = null;
+
+
+
+  function mostrarSlide(n) {
+
+   if (!slides.length) return;
+
+
+
+   for (var i = 0; i < slides.length; i++) {
+
+    slides[i].classList.remove("activo");
+
+   }
+
+
+
+   if (n >= slides.length) {
+
+    indiceSlide = 0;
+
+   }
+
+
+
+   if (n < 0) {
+
+    indiceSlide = slides.length - 1;
+
+   }
+
+
+
+   slides[indiceSlide].classList.add("activo");
+
+  }
+
+
+
+  function siguienteSlide() {
+
+   indiceSlide++;
+
+   if (indiceSlide >= slides.length) {
+
+    indiceSlide = 0;
+
+   }
+
+   mostrarSlide(indiceSlide);
+
+  }
+
+
+
+  function anteriorSlide() {
+
+   indiceSlide--;
+
+   if (indiceSlide < 0) {
+
+    indiceSlide = slides.length - 1;
+
+   }
+
+   mostrarSlide(indiceSlide);
+
+  }
+
+
+
+  function iniciarSlider() {
+
+   slides = document.querySelectorAll(".slide");
+
+   indiceSlide = 0;
+
+
+
+   if (!slides.length) return;
+
+
+
+   mostrarSlide(indiceSlide);
+
+
+
+   if (intervaloSlider) {
+
+    clearInterval(intervaloSlider);
+
+   }
+
+
+
+   intervaloSlider = setInterval(function() {
+
+    siguienteSlide();
+
+   }, 4000);
+
+  }
+
+
+
+  cargarSeccion("inicio.html");
+
+ </script>
+
+
+
+</body>
+
+</html>
